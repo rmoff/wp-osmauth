@@ -95,6 +95,7 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
 {
     global $current_user;
     if (!$access_token) {
+        refreshTokens($system, $current_user);
         $access_token = get_user_meta($current_user, "osm_access_token", true);
     }
     $curl = curl_init();
@@ -333,7 +334,7 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        wp_logout();
+        callOSMEndpoint("OSM","/v3/settings/oauth/access/1240/delete")
         wp_redirect($redirect);
         die;
     }
