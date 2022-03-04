@@ -106,6 +106,11 @@ function callOSMEndpointWithSessionId($system, $endpoint, $session_id=NULL, $acc
     }
     $curl = curl_init();
     $cookie_header=is_null($session_id)?[]:["Cookie: OYM=3~$session_id"];
+    $headers=array_merge(array(
+        'Authorization: Bearer ' . $access_token,
+        'Content-Type: application/x-www-form-urlencoded'
+    ),$cookie_header);
+    print_r($headers);
     curl_setopt_array($curl, array(
         CURLOPT_URL => get_var($system, "base") . $endpoint,
         CURLOPT_POST => TRUE,
@@ -115,10 +120,7 @@ function callOSMEndpointWithSessionId($system, $endpoint, $session_id=NULL, $acc
         CURLOPT_TIMEOUT => 0,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_HTTPHEADER => array_merge(array(
-            'Authorization: Bearer ' . $access_token,
-            'Content-Type: application/x-www-form-urlencoded'
-        ),$cookie_header),
+        CURLOPT_HTTPHEADER => $headers,
         CURLOPT_RETURNTRANSFER => TRUE
     ));
     $response = curl_exec($curl);
