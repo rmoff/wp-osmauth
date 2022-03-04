@@ -93,7 +93,8 @@ function refreshTokens($system, $user)
 
 function callOSMEndpointWithSessionId($system, $endpoint, $session_id = NULL, $access_token = NULL)
 {
-    print_r(get_osm_data());
+    $data=get_osm_data();
+    print_r($data);
     global $current_user;
     if (!$access_token) {
         $linked_accounts = $current_user->get('linked_accounts');
