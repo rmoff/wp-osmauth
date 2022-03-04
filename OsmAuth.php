@@ -109,7 +109,7 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
     ));
     $response = curl_exec($curl);
     curl_close($curl);
-    print_r($curl);
+    print_r($access_token);
     return $response;
 }
 function get_osm_data($access_token = NULL)
