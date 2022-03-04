@@ -93,8 +93,6 @@ function refreshTokens($system, $user)
 
 function callOSMEndpointWithSessionId($system, $endpoint, $session_id = NULL, $access_token = NULL)
 {
-    $data=get_osm_data();
-    print_r($data->globals->session_id);
     global $current_user;
     if (!$access_token) {
         $linked_accounts = $current_user->get('linked_accounts');
@@ -350,6 +348,7 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
         $session_id = get_osm_data()->globals->session_id;
         print_r($session_id);
+        print_r(get_osm_data());
         callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout", $session_id);
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
