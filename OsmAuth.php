@@ -32,7 +32,7 @@ function get_var($system, $var)
 
 function getTokens($system, $authorization_code)
 {
-    $content = "grant_type=authorization_code&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&code=$authorization_code&redirect_uri=".get_var($system, "redirect");
+    $content = "grant_type=authorization_code&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&code=$authorization_code&redirect_uri=" . get_var($system, "redirect");
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => get_var($system, "token") . "?" . $content,
@@ -58,7 +58,7 @@ function refreshTokens($system, $user)
     $linked_accounts = $user->get("linked_accounts");
     foreach ($linked_accounts as $id => $account) {
         if ($system == $system) {
-            $content = "grant_type=refresh_token&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&refresh_token=" . $account["refresh_token"] . "&redirect_uri=".get_var($system, "redirect");
+            $content = "grant_type=refresh_token&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&refresh_token=" . $account["refresh_token"] . "&redirect_uri=" . get_var($system, "redirect");
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => get_var($system, "token") . "?" . $content,
@@ -98,7 +98,10 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
         $linked_accounts = $current_user->get('linked_accounts');
         foreach ($linked_accounts as $id => $account) {
             refreshTokens($account["system"], $current_user);
-            $access_token=$account["access_token"];
+        }
+        $linked_accounts = $current_user->get('linked_accounts');
+        foreach ($linked_accounts as $id => $account) {
+            $access_token = $account["access_token"];
         }
     }
     $curl = curl_init();
@@ -154,7 +157,7 @@ function osm_login_url()
         'system' => 'OSM',
         'redirect' => $redirect
     )));
-    echo get_var("OSM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OSM", "client_id") . "&redirect_uri=".get_var("OSM", "redirect")."&state=$state";
+    echo get_var("OSM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OSM", "client_id") . "&redirect_uri=" . get_var("OSM", "redirect") . "&state=$state";
 }
 function ogm_login_url()
 {
@@ -164,7 +167,7 @@ function ogm_login_url()
         'system' => 'OGM',
         'redirect' => $redirect
     )));
-    echo get_var("OGM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OGM", "client_id") . "&redirect_uri=".get_var("OGM", "redirect")."&state=$state";
+    echo get_var("OGM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OGM", "client_id") . "&redirect_uri=" . get_var("OGM", "redirect") . "&state=$state";
 }
 
 function refresh_user_roles()
@@ -182,13 +185,13 @@ function refresh_user_roles()
         $section_ids = get_var($account["system"], "section_ids");
         $data = get_data($account["system"], $account["access_token"]);
         $all_parent_sections = (array)($data->globals->member_access);
-        $parent_sections=array_replace($parent_sections, array_filter(
+        $parent_sections = array_replace($parent_sections, array_filter(
             $all_parent_sections,
             fn ($key) => in_array($key, $section_ids),
             ARRAY_FILTER_USE_KEY
         ));
         if ($data->globals->roles != null) {
-            $leader_sections=array_replace($leader_sections, array_filter($data->globals->roles, function ($role) use ($section_ids) {
+            $leader_sections = array_replace($leader_sections, array_filter($data->globals->roles, function ($role) use ($section_ids) {
                 return in_array($role->sectionid, $section_ids, true);
             }));
         }
@@ -224,7 +227,7 @@ function refresh_user_roles()
             add_role("{$section_info->sectionid}_leader", "{$section_info->sectionname} Leader", []);
         }
         $user->add_role("{$section_info->sectionid}_leader");
-        foreach (["category" => ["public", "parent","leader"], "attachment_category" => ["public", "parent","leader"]] as $taxonomy => $prefixes) {
+        foreach (["category" => ["public", "parent", "leader"], "attachment_category" => ["public", "parent", "leader"]] as $taxonomy => $prefixes) {
             foreach ($prefixes as $prefix) {
                 if (!term_exists($section_info->sectionid . "_" . $prefix, $taxonomy)) {
                     wp_insert_term(
@@ -343,7 +346,7 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        callOSMEndpoint("OSM","/v3/settings/oauth/access/1240/delete");
+        callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
         wp_redirect($redirect);
         die;
