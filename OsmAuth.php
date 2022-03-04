@@ -357,7 +357,7 @@ function prevent_wp_login()
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
         $session_id = get_osm_data()->globals->session_id;
-        print_r($session_id);
+        print_r(get_osm_data());
         callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout", $session_id);
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
