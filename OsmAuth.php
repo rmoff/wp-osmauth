@@ -94,7 +94,7 @@ function refreshTokens($system, $user)
 function callOSMEndpointWithSessionId($system, $endpoint, $session_id = NULL, $access_token = NULL)
 {
     $data=get_osm_data();
-    print_r($data);
+    print_r($data->globals->session_id);
     global $current_user;
     if (!$access_token) {
         $linked_accounts = $current_user->get('linked_accounts');
@@ -112,9 +112,6 @@ function callOSMEndpointWithSessionId($system, $endpoint, $session_id = NULL, $a
         'Authorization: Bearer ' . $access_token,
         'Content-Type: application/x-www-form-urlencoded'
     ), $cookie_header);
-    if (!is_null($session_id)) {
-        print_r($headers);
-    }
     curl_setopt_array($curl, array(
         CURLOPT_URL => get_var($system, "base") . $endpoint,
         CURLOPT_POST => TRUE,
@@ -285,11 +282,8 @@ function prevent_wp_login()
             'meta_value' => $state->system . "_" . $username,
             'number' => 1
         ));
-        // echo ("<script>console.log('" . print_r(sizeof($user), true) . "')</script>");
         $user = ((sizeof($user) >= 1) ? $user[0] : FALSE);
-        // echo ("<script>console.log(`" . print_r($user, true) . "`)</script>");
         $data = get_data($state->system, $tokens->access_token);
-        // print_r($data->globals);
         $all_parent_sections = $data->globals->member_access;
         $parent_sections = array_filter(
             (array) $all_parent_sections,
@@ -301,9 +295,6 @@ function prevent_wp_login()
         $leader_sections = array_filter($data->globals->roles, function ($role) use ($section_ids) {
             return in_array($role->sectionid, $section_ids, true);
         });
-        // print_r($section_ids);
-        // print_r($parent_sections);
-        // print_r($leader_sections);
         if (!$parent_sections && !$leader_sections) {
             if ($user) {
                 require_once(ABSPATH . 'wp-admin/includes/user.php');
@@ -318,7 +309,6 @@ function prevent_wp_login()
                 $user = get_user_by("ID", wp_create_user($data->globals->email, random_str(128), $data->globals->email));
             }
             $linked_accounts = get_user_meta($user->ID, "linked_accounts", true);
-            // echo ("<script>console.log(`" . print_r($linked_accounts, true) . "`)</script>");
             if (!$linked_accounts) {
                 $linked_accounts = array();
             }
@@ -359,6 +349,7 @@ function prevent_wp_login()
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
         $session_id = get_osm_data()->globals->session_id;
+        print_r($session_id);
         callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout", $session_id);
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
