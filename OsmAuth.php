@@ -91,8 +91,8 @@ function refreshTokens($system, $user)
     clean_user_cache($user->ID);
 }
 
-function callOSMEndpoint($system, $endpoint, $access_token = NULL)
-{
+function callOSMEndpointWithSessionId($system, $endpoint, $session_id=NULL, $access_token = NULL)
+{    
     global $current_user;
     if (!$access_token) {
         $linked_accounts = $current_user->get('linked_accounts');
@@ -105,6 +105,7 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
         }
     }
     $curl = curl_init();
+    $cookie_header=is_null($session_id)?[]:["Cookie: OYM=3~$session_id"];
     curl_setopt_array($curl, array(
         CURLOPT_URL => get_var($system, "base") . $endpoint,
         CURLOPT_POST => TRUE,
@@ -114,14 +115,19 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
         CURLOPT_TIMEOUT => 0,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_HTTPHEADER => array(
+        CURLOPT_HTTPHEADER => array_merge(array(
             'Authorization: Bearer ' . $access_token,
             'Content-Type: application/x-www-form-urlencoded'
-        ), CURLOPT_RETURNTRANSFER => TRUE
+        ),$cookie_header),
+        CURLOPT_RETURNTRANSFER => TRUE
     ));
     $response = curl_exec($curl);
     curl_close($curl);
     return $response;
+}
+function callOSMEndpoint($system, $endpoint, $access_token = NULL)
+{
+    return callOSMEndpointWithSessionId($system, $endpoint, NULL, $access_token);
 }
 function get_osm_data($access_token = NULL)
 {
@@ -346,7 +352,8 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        throw new ErrorException(callOSMEndpoint("OSM", "/ext/users/auth/?action=logout"));
+        $session_id=$get_osm_data()["globals"]["session_id"]
+        throw new ErrorException(callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout",$session_id));
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
         wp_redirect($redirect);
