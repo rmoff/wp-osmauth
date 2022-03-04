@@ -334,7 +334,7 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        callOSMEndpoint("OSM","/v3/settings/oauth/access/1240/delete")
+        callOSMEndpoint("OSM","/v3/settings/oauth/access/1240/delete");
         wp_redirect($redirect);
         die;
     }
