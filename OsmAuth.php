@@ -352,7 +352,7 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        $session_id=$get_osm_data()["globals"]["session_id"];
+        $session_id=get_osm_data()["globals"]["session_id"];
         throw new ErrorException(callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout",$session_id));
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
