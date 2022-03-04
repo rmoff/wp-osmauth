@@ -332,6 +332,10 @@ function prevent_wp_login()
         die;
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
+    } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
+        wp_logout();
+        wp_redirect($redirect);
+        die;
     }
 }
 
