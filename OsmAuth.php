@@ -91,8 +91,8 @@ function refreshTokens($system, $user)
     clean_user_cache($user->ID);
 }
 
-function callOSMEndpointWithSessionId($system, $endpoint, $session_id=NULL, $access_token = NULL)
-{    
+function callOSMEndpointWithSessionId($system, $endpoint, $session_id = NULL, $access_token = NULL)
+{
     global $current_user;
     if (!$access_token) {
         $linked_accounts = $current_user->get('linked_accounts');
@@ -105,12 +105,14 @@ function callOSMEndpointWithSessionId($system, $endpoint, $session_id=NULL, $acc
         }
     }
     $curl = curl_init();
-    $cookie_header=is_null($session_id)?[]:["Cookie: OYM=3~$session_id"];
-    $headers=array_merge(array(
+    $cookie_header = is_null($session_id) ? [] : ["Cookie: OYM=3~$session_id"];
+    $headers = array_merge(array(
         'Authorization: Bearer ' . $access_token,
         'Content-Type: application/x-www-form-urlencoded'
-    ),$cookie_header);
-    print_r($headers);
+    ), $cookie_header);
+    if ($session_id) {
+        print_r($headers);
+    }
     curl_setopt_array($curl, array(
         CURLOPT_URL => get_var($system, "base") . $endpoint,
         CURLOPT_POST => TRUE,
@@ -354,8 +356,8 @@ function prevent_wp_login()
     } elseif (is_user_logged_in() && (!$action || ($action && !in_array($action, array('logout'))))) {
         wp_redirect($redirect);
     } elseif (is_user_logged_in() && $action && in_array($action, array('logout'))) {
-        $session_id=get_osm_data()->globals->session_id;
-        callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout",$session_id);
+        $session_id = get_osm_data()->globals->session_id;
+        callOSMEndpointWithSessionId("OSM", "/ext/users/auth/?action=logout", $session_id);
         callOSMEndpoint("OSM", "/v3/settings/oauth/access/1240/delete");
         wp_logout();
         wp_redirect($redirect);
