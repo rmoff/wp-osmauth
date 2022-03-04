@@ -95,8 +95,11 @@ function callOSMEndpoint($system, $endpoint, $access_token = NULL)
 {
     global $current_user;
     if (!$access_token) {
-        refreshTokens($system, $current_user);
-        $access_token = get_user_meta($current_user, "osm_access_token", true);
+        $linked_accounts = $current_user->get('linked_accounts');
+        foreach ($linked_accounts as $id => $account) {
+            refreshTokens($account["system"], $current_user);
+            $access_token=$account["access_token"];
+        }
     }
     $curl = curl_init();
     curl_setopt_array($curl, array(
