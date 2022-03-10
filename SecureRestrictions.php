@@ -100,7 +100,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
         print_r($post_categories);
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
             unset($items[$key]);
-            echo "removing ".$key
+            echo "removing ".$key;
         }
     }
     return $items;
