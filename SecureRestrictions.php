@@ -57,7 +57,7 @@ function limit_frontend_categories_to_allowed($query)
         $allowed_categories = get_allowed_categories(false);
         $query->query_vars['category__in'] = implode(",",$allowed_categories);
         // $query->include = $allowed_categories;
-        // print_r($query);
+        print_r($query);
         return $query;
     }
     return $query;
