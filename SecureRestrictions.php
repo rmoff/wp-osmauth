@@ -56,7 +56,7 @@ function limit_frontend_categories_to_allowed($query)
     if (!is_admin() && !current_user_can("administrator")) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
-        $allowed_categories = get_allowed_categories(true);
+        $allowed_categories = get_allowed_categories();
         $allowed_category_ids = array_map(function ($slug) {
             return get_category_by_slug($slug)->term_id;
         }, $allowed_categories);
@@ -91,13 +91,16 @@ add_filter('wp_get_nav_menu_items', 'wpse31748_exclude_menu_items', null, 3);
 function wpse31748_exclude_menu_items($items, $menu, $args)
 {
     // Iterate over the items to search and destroy
-    $allowed_categories = get_allowed_categories(false);
+    $allowed_categories = get_allowed_categories();
+    print_r($allowed_categories);
     foreach ($items as $key => $item) {
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
+        print_r($post_categories);
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
             unset($items[$key]);
+            echo "removing ".$key
         }
     }
     return $items;
