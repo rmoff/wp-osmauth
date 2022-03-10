@@ -55,8 +55,8 @@ function limit_frontend_categories_to_allowed($query)
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories(false);
-        $query->query_vars['slug'] = $allowed_categories;
-        $query->include = $allowed_categories;
+        $query->query_vars['category_in'] = $allowed_categories;
+        // $query->include = $allowed_categories;
         return $query;
     }
     return $query;
