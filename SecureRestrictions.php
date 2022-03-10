@@ -53,7 +53,7 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
-    if (!is_admin() && !current_user_can("administrator") && is_main_query()) {
+    if (!is_admin() && !current_user_can("administrator")) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories();
@@ -94,6 +94,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     $allowed_categories = get_allowed_categories();
     print_r($allowed_categories);
     foreach ($items as $key => $item) {
+        echo($key);
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
