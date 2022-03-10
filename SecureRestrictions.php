@@ -58,7 +58,7 @@ function limit_frontend_categories_to_allowed($query)
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories(false);
         $allowed_category_ids = array_map(function ($slug) {
-            return get_category_by_slug($slug)->ID;
+            return get_category_by_slug($slug)->term_id;
         }, $allowed_categories);
         $query->query_vars['category__in'] = implode(",", $allowed_category_ids);
         // $query->include = $allowed_categories;
