@@ -94,7 +94,8 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     $allowed_categories = get_allowed_categories();
     print_r($allowed_categories);
     foreach ($items as $key => $item) {
-        echo($key);
+        print_r($key);
+        print_r($item);
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
