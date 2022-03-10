@@ -90,6 +90,7 @@ function add_rand_str_to_upload_name($file)
 add_filter('wp_get_nav_menu_items', 'wpse31748_exclude_menu_items', null, 3);
 function wpse31748_exclude_menu_items($items, $menu, $args)
 {
+    print_r($items);
     // Iterate over the items to search and destroy
     $allowed_categories = get_allowed_categories();
     foreach ($items as $key => $item) {
