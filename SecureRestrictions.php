@@ -53,7 +53,7 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
-    if (!is_admin() && !current_user_can("administrator")) {
+    if (!is_admin() && !current_user_can("administrator") && is_main_query()) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories();
@@ -100,7 +100,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
         print_r($post_categories);
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
             unset($items[$key]);
-            echo "removing ".$key;
+            print_r("removing ".$key);
         }
     }
     return $items;
