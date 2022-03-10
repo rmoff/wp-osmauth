@@ -214,10 +214,9 @@ function refresh_user_roles()
     wp_update_user($userdata);
     $roles = in_array("administrator", $user->roles) ? "administrator" : "";
     $roles = array_merge($roles, array_filter($user->roles, function ($role) {
-        print_r($role);
-        echo(preg_match("/\d+_admin/", $role));
         return preg_match("/\d+_admin/", $role);
     }));
+    print_r($roles);
     $user->set_role($roles);
     foreach ($parent_sections as $section_id => $section_info) {
         $parent_role = get_role("{$section_id}_parent");
