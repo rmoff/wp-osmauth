@@ -212,12 +212,17 @@ function refresh_user_roles()
         'display_name' => $data->globals->firstname . " " . substr($data->globals->lastname, 0, 1),
     );
     wp_update_user($userdata);
-    $roles = in_array("administrator", $user->roles) ? "administrator" : "";
+    $roles = in_array("administrator", $user->roles) ? ["administrator"] : [];
     $roles = array_merge($roles, array_filter($user->roles, function ($role) {
         return preg_match("/\d+_admin/", $role);
     }));
-    print_r($roles);
-    $user->set_role($roles);
+    foreach ($roles as $i => $role){
+        if($i==0){
+            $user->set_role($role);
+        } else {
+            $user->add_role($role);
+        }
+    }
     foreach ($parent_sections as $section_id => $section_info) {
         $parent_role = get_role("{$section_id}_parent");
         if (!$parent_role) {
