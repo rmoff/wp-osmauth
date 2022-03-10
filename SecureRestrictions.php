@@ -91,7 +91,7 @@ add_filter('wp_get_nav_menu_items', 'wpse31748_exclude_menu_items', null, 3);
 function wpse31748_exclude_menu_items($items, $menu, $args)
 {
     // Iterate over the items to search and destroy
-    $allowed_categories = get_allowed_categories();
+    $allowed_categories = get_allowed_categories(false);
     foreach ($items as $key => $item) {
         $post_categories = array_map(function ($term) {
             return $term->slug;
