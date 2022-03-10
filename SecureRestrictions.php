@@ -62,7 +62,7 @@ function limit_frontend_categories_to_allowed($query)
         }, $allowed_categories);
         $query->query_vars['category__in'] = implode(",", $allowed_category_ids);
         // $query->include = $allowed_categories;
-        print_r($query);
+        // print_r($query);
         return $query;
     }
     return $query;
