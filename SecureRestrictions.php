@@ -60,7 +60,7 @@ function limit_frontend_categories_to_allowed($query)
         $allowed_category_ids = array_map(function ($slug) {
             return get_category_by_slug($slug)->term_id;
         }, $allowed_categories);
-        $query->query_vars['category__in'] = implode(",", $allowed_category_ids);
+        $query->query_vars['category__in'] = $allowed_category_ids;
         // $query->include = $allowed_categories;
         // print_r($query);
         return $query;
