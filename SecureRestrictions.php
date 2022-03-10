@@ -33,16 +33,18 @@ function get_allowed_categories($strict = true)
     if (!$strict) {
         $all_categories = get_categories();
         $allowed_categories = array_merge(
-            $allowed_categories,array_map(
+            $allowed_categories,
+            array_map(
                 function ($category) {
                     return $category->slug;
                 },
-            array_filter($all_categories, function ($category) {
-                return preg_match(
-                    "/^(\d+_)?((public)|(parent)|(leader))$/",
-                    $category->slug
-                );
-            }))
+                array_filter($all_categories, function ($category) {
+                    return preg_match(
+                        "/^(\d+_)?((public)|(parent)|(leader))$/",
+                        $category->slug
+                    );
+                })
+            )
         );
     }
     $allowed_categories = array_unique($allowed_categories, SORT_STRING);
@@ -51,11 +53,14 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
-    if (!is_admin() && !current_user_can("administrator") ) {
+    if (!is_admin() && !current_user_can("administrator")) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories(false);
-        $query->query_vars['category__in'] = implode(",",$allowed_categories);
+        $allowed_category_ids = array_map(function ($slug) {
+            return get_category_by_slug($slug)->ID;
+        }, $allowed_categories);
+        $query->query_vars['category__in'] = implode(",", $allowed_category_ids);
         // $query->include = $allowed_categories;
         print_r($query);
         return $query;
