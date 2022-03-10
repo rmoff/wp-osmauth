@@ -215,6 +215,7 @@ function refresh_user_roles()
     $roles = in_array("administrator", $user->roles) ? "administrator" : "";
     $roles = array_merge($roles, array_filter($user->roles, function ($role) {
         print_r($role);
+        echo(preg_match("/\d+_admin/", $role));
         return preg_match("/\d+_admin/", $role);
     }));
     $user->set_role($roles);
