@@ -53,17 +53,20 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
+    if ($query->post_type == "nav_menu_item") {
+        return $query;
+    }
     if (!is_admin() && !current_user_can("administrator")) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
+        return get_category_by_slug($slug)->term_id;
         $allowed_categories = get_allowed_categories();
         $allowed_category_ids = array_map(function ($slug) {
-            return get_category_by_slug($slug)->term_id;
         }, $allowed_categories);
         $query->query_vars['category__in'] = $allowed_category_ids;
         // $query->include = $allowed_categories;
-        echo("<pre>".print_r($query,true)."</pre>");
-        echo "<pre>".$GLOBALS['wp_query']->request."</pre>";
+        echo ("<pre>" . print_r($query, true) . "</pre>");
+        echo "<pre>" . $GLOBALS['wp_query']->request . "</pre>";
         return $query;
     }
     return $query;
