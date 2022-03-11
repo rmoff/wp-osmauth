@@ -53,7 +53,7 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
-    echo "<pre>POST Type = ".$query->post_type."</pre>";
+    echo "<pre>POST Type = ".$query->query_vars['post_type']."</pre>";
     if ($query->post_type == "nav_menu_item") {
         return $query;
     }
