@@ -55,7 +55,7 @@ function limit_frontend_categories_to_allowed($query)
 {
     // echo "<pre>POST Type = ".$query->query_vars['post_type']."</pre>";
     if ($query->query_vars['post_type'] == "nav_menu_item") {
-        echo "<pre>IS Nav Menu Item</pre>";
+        // echo "<pre>IS Nav Menu Item</pre>";
         return $query;
     }
     if (!is_admin() && !current_user_can("administrator")) {
