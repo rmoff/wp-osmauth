@@ -61,9 +61,9 @@ function limit_frontend_categories_to_allowed($query)
     if (!is_admin() && !current_user_can("administrator")) {
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
-        return get_category_by_slug($slug)->term_id;
         $allowed_categories = get_allowed_categories();
         $allowed_category_ids = array_map(function ($slug) {
+            return get_category_by_slug($slug)->term_id;
         }, $allowed_categories);
         $query->query_vars['category__in'] = $allowed_category_ids;
         // $query->include = $allowed_categories;
