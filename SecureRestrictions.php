@@ -53,8 +53,8 @@ function get_allowed_categories($strict = true)
 
 function limit_frontend_categories_to_allowed($query)
 {
-    echo("<pre>".print_r($query,true)."</pre>");
     if (!is_admin() && !current_user_can("administrator")) {
+        echo("<pre>".print_r($query,true)."</pre>");
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories();
