@@ -54,7 +54,6 @@ function get_allowed_categories($strict = true)
 function limit_frontend_categories_to_allowed($query)
 {
     if (!is_admin() && !current_user_can("administrator")) {
-        echo("<pre>".print_r($query,true)."</pre>");
         // Not a query for an admin page.
         // It's the main query for a front end page of your site.
         $allowed_categories = get_allowed_categories();
@@ -63,7 +62,7 @@ function limit_frontend_categories_to_allowed($query)
         }, $allowed_categories);
         $query->query_vars['category__in'] = $allowed_category_ids;
         // $query->include = $allowed_categories;
-        // print_r($query);
+        echo("<pre>".print_r($query,true)."</pre>");
         return $query;
     }
     return $query;
