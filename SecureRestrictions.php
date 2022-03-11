@@ -65,8 +65,8 @@ function limit_frontend_categories_to_allowed($query)
         }, $allowed_categories);
         $query->query_vars['category__in'] = $allowed_category_ids;
         // $query->include = $allowed_categories;
-        echo ("<pre>" . print_r($query, true) . "</pre>");
-        echo "<pre>" . $GLOBALS['wp_query']->request . "</pre>";
+        // echo ("<pre>" . print_r($query, true) . "</pre>");
+        // echo "<pre>" . $GLOBALS['wp_query']->request . "</pre>";
         return $query;
     }
     return $query;
