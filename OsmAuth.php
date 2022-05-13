@@ -332,7 +332,7 @@ function prevent_wp_login()
             print_r($user);
             echo ("\n\n");
             // echo ("<script>console.log(`pre update user meta`)</script>");
-            osm_auth_refresh_user_roles();
+            osm_auth_refresh_user_roles($user);
             // echo ("<script>console.log(`post leader section iterator`)</script>");
             clean_user_cache($user->ID);
             wp_clear_auth_cookie();
