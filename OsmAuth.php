@@ -177,7 +177,7 @@ function ogm_login_url()
     echo get_var("OGM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OGM", "client_id") . "&redirect_uri=" . get_var("OGM", "redirect") . "&state=$state";
 }
 
-function refresh_user_roles()
+function osm_auth_refresh_user_roles()
 {
     $user = wp_get_current_user();
     $linked_accounts = $user->get('linked_accounts');
@@ -327,7 +327,7 @@ function prevent_wp_login()
             );
             update_user_meta($user->ID, 'linked_accounts', $linked_accounts);
             // echo ("<script>console.log(`pre update user meta`)</script>");
-            refresh_user_roles();
+            osm_auth_refresh_user_roles();
             // echo ("<script>console.log(`post leader section iterator`)</script>");
             clean_user_cache($user->ID);
             wp_clear_auth_cookie();
