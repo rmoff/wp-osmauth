@@ -177,9 +177,11 @@ function ogm_login_url()
     echo get_var("OGM", "base") . "/oauth/authorize/?response_type=code&client_id=" . get_var("OGM", "client_id") . "&redirect_uri=" . get_var("OGM", "redirect") . "&state=$state";
 }
 
-function osm_auth_refresh_user_roles()
+function osm_auth_refresh_user_roles($user = NULL)
 {
-    $user = wp_get_current_user();
+    if ($user == NULL) {
+        $user = wp_get_current_user();
+    }
     print_r($user);
     $linked_accounts = $user->get('linked_accounts');
     foreach ($linked_accounts as $id => $account) {
@@ -217,8 +219,8 @@ function osm_auth_refresh_user_roles()
     $roles = array_merge($roles, array_filter($user->roles, function ($role) {
         return preg_match("/\d+_admin/", $role);
     }));
-    foreach ($roles as $i => $role){
-        if($i==0){
+    foreach ($roles as $i => $role) {
+        if ($i == 0) {
             $user->set_role($role);
         } else {
             $user->add_role($role);
@@ -328,7 +330,7 @@ function prevent_wp_login()
             );
             update_user_meta($user->ID, 'linked_accounts', $linked_accounts);
             print_r($user);
-            echo("\n\n");
+            echo ("\n\n");
             // echo ("<script>console.log(`pre update user meta`)</script>");
             osm_auth_refresh_user_roles();
             // echo ("<script>console.log(`post leader section iterator`)</script>");
