@@ -22,7 +22,7 @@ Text Domain: smither
 
 // Hook the appropriate WordPress action
 
-add_action('init', 'prevent_wp_login');
+add_action('init', 'prevent_wp_login', -1000);
 include_once("template/LoginTemplaterRegister.php");
 
 function get_var($system, $var)
