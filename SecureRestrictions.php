@@ -103,6 +103,9 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
+        if (count($post_categories)==0){
+            break;
+        }
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
             unset($items[$key]);
         }
