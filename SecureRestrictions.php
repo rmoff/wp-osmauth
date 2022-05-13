@@ -167,7 +167,7 @@ function filter_the_content_in_the_main_loop( $content ) {
     if (is_admin() || current_user_can("administrator")) {
         return $content;
     }
-    if ( is_singular() && in_the_loop() && is_main_query() ) {
+    if ( in_the_loop() && is_main_query() ) {
         $allowed_categories = get_allowed_categories();
         $matches=[];
         preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE );
