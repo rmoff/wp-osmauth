@@ -187,6 +187,7 @@ function osm_auth_refresh_user_roles($user = NULL)
         refreshTokens($account["system"], $user);
     }
     $user = wp_get_current_user();
+    print_r($user);
     $linked_accounts = $user->get('linked_accounts');
     $parent_sections = array();
     $leader_sections = array();
