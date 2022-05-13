@@ -179,8 +179,8 @@ function ogm_login_url()
 
 function osm_auth_refresh_user_roles()
 {
-    print_r($user);
     $user = wp_get_current_user();
+    print_r($user);
     $linked_accounts = $user->get('linked_accounts');
     foreach ($linked_accounts as $id => $account) {
         refreshTokens($account["system"], $user);
