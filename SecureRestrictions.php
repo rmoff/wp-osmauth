@@ -170,9 +170,9 @@ function filter_the_content_in_the_main_loop( $content ) {
         preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE );
         $i = count($matches[0]);
         while(--$i) {
-            $match=$matches[0][$i];
-            $image_id=$matches[1][$i][0];
-            $image_categories = get_the_category($image_id);
+            // $match=$matches[0][$i];
+            // $image_id=$matches[1][$i][0];
+            // $image_categories = get_the_category($image_id);
             // if (count($image_categories) > 0) {
             //     $image_categories = array_map(function ($term) {
             //         return $term->slug;
