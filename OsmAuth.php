@@ -327,6 +327,8 @@ function prevent_wp_login()
                 "refresh_token" => $tokens->refresh_token
             );
             update_user_meta($user->ID, 'linked_accounts', $linked_accounts);
+            print_r($user);
+            echo("\n\n");
             // echo ("<script>console.log(`pre update user meta`)</script>");
             osm_auth_refresh_user_roles();
             // echo ("<script>console.log(`post leader section iterator`)</script>");
