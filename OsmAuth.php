@@ -182,7 +182,6 @@ function osm_auth_refresh_user_roles($user = NULL)
     if ($user == NULL) {
         $user = wp_get_current_user();
     }
-    print_r($user);
     $linked_accounts = $user->get('linked_accounts');
     foreach ($linked_accounts as $id => $account) {
         refreshTokens($account["system"], $user);
@@ -329,8 +328,6 @@ function prevent_wp_login()
                 "refresh_token" => $tokens->refresh_token
             );
             update_user_meta($user->ID, 'linked_accounts', $linked_accounts);
-            print_r($user);
-            echo ("\n\n");
             // echo ("<script>console.log(`pre update user meta`)</script>");
             osm_auth_refresh_user_roles($user);
             // echo ("<script>console.log(`post leader section iterator`)</script>");
