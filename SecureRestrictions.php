@@ -166,8 +166,15 @@ function filter_the_content_in_the_main_loop( $content ) {
  
     // Check if we're inside the main loop in a single Post.
     if ( is_singular() && in_the_loop() && is_main_query() ) {
-        print_r($content);
-        return $content . esc_html__( 'I’m filtering the content inside the main loop', 'wporg');
+        $matches=[];
+        preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE );
+        $i = count($matches[0]);
+        while(--$i) {
+            $match=$matches[0][$i];
+            if ($matches[1][$i][0] % 2 == 0){ # TODO: Change this test
+                $content=substr_replace($content, "", $match[1], strlen($match[0]));
+            }
+        }
     }
  
     return $content;
