@@ -163,15 +163,17 @@ function wpse_77390_enable_media_categories()
 
 add_filter( 'the_content', 'filter_the_content_in_the_main_loop', 1 );
 function filter_the_content_in_the_main_loop( $content ) {
- 
     // Check if we're inside the main loop in a single Post.
     if ( is_singular() && in_the_loop() && is_main_query() ) {
+        $allowed_categories = get_allowed_categories();
         $matches=[];
         preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE );
         $i = count($matches[0]);
         while(--$i) {
             $match=$matches[0][$i];
-            if ($matches[1][$i][0] % 2 == 0){ # TODO: Change this test
+            $image_id=$matches[1][$i][0];
+            $image_categories = get_the_category($image_id);
+            if (count(array_intersect($image_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
                 $content=substr_replace($content, "", $match[1], strlen($match[0]));
             }
         }
