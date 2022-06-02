@@ -186,7 +186,7 @@ function osm_auth_refresh_user_roles($user = NULL)
     foreach ($linked_accounts as $id => $account) {
         refreshTokens($account["system"], $user);
     }
-    $user = get_user_by("id",$user->ID);
+    $user = get_user_by("id", $user->ID);
     $linked_accounts = $user->get('linked_accounts');
     $parent_sections = array();
     $leader_sections = array();
@@ -214,7 +214,10 @@ function osm_auth_refresh_user_roles($user = NULL)
         'display_name' => $data->globals->firstname . " " . substr($data->globals->lastname, 0, 1),
     );
     wp_update_user($userdata);
-    $roles = in_array("administrator", $user->roles) ? ["administrator"] : [];
+    $locked_roles = get_var("general", "locked_roles");
+    $roles = array_filter($user->roles, function ($role) use ($locked_roles) {
+        return in_array($role, $locked_roles);
+    });
     $roles = array_merge($roles, array_filter($user->roles, function ($role) {
         return preg_match("/\d+_admin/", $role);
     }));
