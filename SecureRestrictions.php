@@ -100,6 +100,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     print_r(count($items));
     print_r($items);
     print_r($menu);
+    print_r("######asdasdasd######");
     $allowed_categories = get_allowed_categories();
     foreach ($items as $key => $item) {
         $post_categories = array_map(function ($term) {
