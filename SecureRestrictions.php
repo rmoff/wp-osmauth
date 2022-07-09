@@ -99,7 +99,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     // Iterate over the items to search and destroy
     // print_r(count($items));
     // print_r("######1######");
-    print("<pre>" . print_r($items, true) . "<pre>");
+    // print("<pre>" . print_r($items, true) . "<pre>");
     // print_r("######2######");
     // print_r($menu);
     // print_r("######3######");
