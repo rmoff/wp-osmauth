@@ -99,7 +99,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     // Iterate over the items to search and destroy
     // print_r(count($items));
     // print_r("######1######");
-    // print_r($items);
+    print("<pre>" . print_r($items, true) . "<pre>");
     // print_r("######2######");
     // print_r($menu);
     // print_r("######3######");
@@ -108,7 +108,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
-        if (count($post_categories)==0){
+        if (count($post_categories) == 0) {
             break;
         }
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
@@ -169,17 +169,18 @@ function wpse_77390_enable_media_categories()
     register_taxonomy_for_object_type('post_tag', 'attachment');
 }
 
-add_filter( 'the_content', 'filter_the_content_in_the_main_loop', 1 );
-function filter_the_content_in_the_main_loop( $content ) {
+add_filter('the_content', 'filter_the_content_in_the_main_loop', 1);
+function filter_the_content_in_the_main_loop($content)
+{
     // Check if we're inside the main loop in a single Post.
-    if ( in_the_loop() && is_main_query() ) {
+    if (in_the_loop() && is_main_query()) {
         $allowed_categories = get_allowed_categories();
-        $matches=[];
-        preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE );
+        $matches = [];
+        preg_match_all('/<!-- wp:image {"id":(\d+).*?<!-- \/wp:image -->/s', $content, $matches, PREG_OFFSET_CAPTURE);
         $i = count($matches[0]);
-        while(--$i >= 0) {
-            $match=$matches[0][$i];
-            $image_id=$matches[1][$i][0];
+        while (--$i >= 0) {
+            $match = $matches[0][$i];
+            $image_id = $matches[1][$i][0];
             $image_categories = get_the_category($image_id);
             if (count($image_categories) > 0) {
                 $image_categories = array_map(function ($term) {
@@ -189,7 +190,7 @@ function filter_the_content_in_the_main_loop( $content ) {
                 $image_categories = ($image_id);
             }
             if (count(array_intersect($image_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
-                $content=substr_replace($content, "", $match[1], strlen($match[0]));
+                $content = substr_replace($content, "", $match[1], strlen($match[0]));
             }
         }
     }
