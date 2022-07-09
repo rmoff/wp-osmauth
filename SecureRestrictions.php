@@ -109,11 +109,11 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
             return $term->slug;
         }, get_the_category($item->object_id));
         if (count($post_categories) == 0) {
-            print("<script>console.log('No categories for item',".$key.")</script>");
+            print("<script>console.log('No categories for item: ".$key."')</script>");
             break;
         }
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
-            print("<script>console.log('Removing key',".$key.")</script>");
+            print("<script>console.log('Removing key: ".$key."')</script>");
             unset($items[$key]);
         }
     }
