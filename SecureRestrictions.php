@@ -99,28 +99,22 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     // Iterate over the items to search and destroy
     // print_r(count($items));
     // print_r("######1######");
-    print("<script>console.log(" . json_encode($items) . ")</script>");
+    // print("<script>console.log(" . json_encode($items) . ")</script>");
     // print_r("######2######");
     // print_r($menu);
     // print_r("######3######");
     $allowed_categories = get_allowed_categories();
     foreach ($items as $key => $item) {
-        print("<script>console.log('start " . $key . "')</script>");
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
         if (count($post_categories) == 0) {
-            print("<script>console.log('No categories for item: ".$key."')</script>");
             continue;
         }
         if (count(array_intersect($post_categories, $allowed_categories)) === 0 && !current_user_can('administrator')) {
-            print("<script>console.log('Removing key: ".$key."')</script>");
             unset($items[$key]);
         }
-        print("<script>console.log('".json_encode(array_intersect($post_categories, $allowed_categories))."')</script>");
     }
-    print("<script>console.log(" . json_encode($items) . ")</script>");
-    print("<script>console.log('end " . $key . "')</script>");
     return $items;
 }
 
