@@ -105,6 +105,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
     // print_r("######3######");
     $allowed_categories = get_allowed_categories();
     foreach ($items as $key => $item) {
+        print("<script>console.log('start " . $key . "')</script>");
         $post_categories = array_map(function ($term) {
             return $term->slug;
         }, get_the_category($item->object_id));
@@ -119,6 +120,7 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
         print("<script>console.log('".json_encode(array_intersect($post_categories, $allowed_categories))."')</script>");
     }
     print("<script>console.log(" . json_encode($items) . ")</script>");
+    print("<script>console.log('end " . $key . "')</script>");
     return $items;
 }
 
