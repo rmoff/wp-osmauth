@@ -116,7 +116,9 @@ function wpse31748_exclude_menu_items($items, $menu, $args)
             print("<script>console.log('Removing key: ".$key."')</script>");
             unset($items[$key]);
         }
+        print("<script>console.log('".json_encode(array_intersect($post_categories, $allowed_categories))."')</script>");
     }
+    print("<script>console.log(" . json_encode($items) . ")</script>");
     return $items;
 }
 
