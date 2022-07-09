@@ -97,12 +97,12 @@ add_filter('wp_get_nav_menu_items', 'wpse31748_exclude_menu_items', null, 3);
 function wpse31748_exclude_menu_items($items, $menu, $args)
 {
     // Iterate over the items to search and destroy
-    print_r(count($items));
-    print_r("######1######");
-    print_r($items);
-    print_r("######2######");
-    print_r($menu);
-    print_r("######3######");
+    // print_r(count($items));
+    // print_r("######1######");
+    // print_r($items);
+    // print_r("######2######");
+    // print_r($menu);
+    // print_r("######3######");
     $allowed_categories = get_allowed_categories();
     foreach ($items as $key => $item) {
         $post_categories = array_map(function ($term) {
