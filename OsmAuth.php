@@ -38,6 +38,8 @@ function getTokens($system, $authorization_code)
         CURLOPT_URL => get_var($system, "token") . "?" . $content,
         CURLOPT_SSL_VERIFYPEER => true,
         CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => TRUE,
+        CURLOPT_CUSTOMREQUEST => 'POST',
     ));
     $response = curl_exec($curl);
     curl_close($curl);
@@ -64,6 +66,8 @@ function refreshTokens($system, $user)
                 CURLOPT_URL => get_var($system, "token") . "?" . $content,
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => TRUE,
+                CURLOPT_CUSTOMREQUEST => 'POST',
             ));
             $response = curl_exec($curl);
             curl_close($curl);
@@ -196,7 +200,7 @@ function osm_auth_refresh_user_roles($user = NULL)
         $all_parent_sections = (array)($data->globals->member_access);
         $parent_sections = array_replace($parent_sections, array_filter(
             $all_parent_sections,
-            fn ($key) => in_array($key, $section_ids),
+            fn($key) => in_array($key, $section_ids),
             ARRAY_FILTER_USE_KEY
         ));
         if ($data->globals->roles != null) {
