@@ -35,10 +35,11 @@ function getTokens($system, $authorization_code)
     $content = "grant_type=authorization_code&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&code=$authorization_code&redirect_uri=" . get_var($system, "redirect");
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => get_var($system, "token") . "?" . $content,
+        CURLOPT_URL => get_var($system, "token"),
         CURLOPT_SSL_VERIFYPEER => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST => TRUE,
+        CURLOPT_POSTFIELDS => $content,
         CURLOPT_CUSTOMREQUEST => 'POST',
     ));
     $response = curl_exec($curl);
@@ -63,10 +64,11 @@ function refreshTokens($system, $user)
             $content = "grant_type=refresh_token&client_id=" . get_var($system, "client_id") . "&client_secret=" . get_var($system, "client_secret") . "&refresh_token=" . $account["refresh_token"] . "&redirect_uri=" . get_var($system, "redirect");
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL => get_var($system, "token") . "?" . $content,
+                CURLOPT_URL => get_var($system, "token"),
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_POST => TRUE,
+                CURLOPT_POSTFIELDS => $content,
                 CURLOPT_CUSTOMREQUEST => 'POST',
             ));
             $response = curl_exec($curl);
